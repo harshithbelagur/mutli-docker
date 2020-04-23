@@ -8,7 +8,6 @@ before_install:
     # add any other tests, if any
 
 script:
-    - script:
         - docker run -e CI=true harshith12/react-test npm test
 
 after_success:
