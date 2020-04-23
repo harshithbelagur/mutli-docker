@@ -1,0 +1,24 @@
+language: generic 
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t harshith12/react-test -f ./client/Dockerfile.dev ./client
+    # add any other tests, if any
+
+script:
+    - docker run harshith12/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t harshith12/multi-client ./client
+    - docker build -t harshith12/multi-nginx ./nginx
+    - docker build -t harshith12/multi-server ./server
+    - docker build -t harshith12/multi-worker ./worker
+    # Log in to the docker CLI
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_ID" --password-stdin
+    # Take those images and send them to Docker Hub
+    - docker push harshith12/multi-client
+    - docker push harshith12/multi-nginx
+    - docker push harshith12/multi-server
+    - docker push harshith12/multi-worker
