@@ -8,7 +8,8 @@ before_install:
     # add any other tests, if any
 
 script:
-    - docker run harshith12/react-test npm test -- --coverage
+    - script:
+        - docker run -e CI=true harshith12/react-test npm test
 
 after_success:
     - docker build -t harshith12/multi-client ./client
